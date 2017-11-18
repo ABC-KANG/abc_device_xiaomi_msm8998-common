@@ -628,7 +628,6 @@ vendor/lib/vendor.qti.imsrtpservice@1.0-service-Impl.so
 vendor/lib/vendor.qti.imsrtpservice@1.0_vendor.so
 
 # IPA
-vendor/bin/ipacm-diag
 vendor/firmware/ipa_fws.b00
 vendor/firmware/ipa_fws.b01
 vendor/firmware/ipa_fws.b02
