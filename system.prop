@@ -73,7 +73,7 @@ persist.camera.HAL3.enabled=1
 persist.cne.feature=1
 
 # FRP
-ro.frp.pst=/dev/block/bootdevice/by-name/frp
+ro.frp.pst=/dev/block/platform/soc/1da4000.ufshc/by-name/frp
 
 # Display
 debug.gralloc.enable_fb_ubwc=1
