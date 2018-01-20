@@ -237,7 +237,7 @@ service per_proxy /vendor/bin/pm-proxy
     group system
     disabled
 
-service readmac /system/bin/readmac
+service readmac /vendor/bin/readmac
     class main
     user root
     group root
