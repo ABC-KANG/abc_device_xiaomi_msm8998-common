@@ -1010,7 +1010,7 @@ service profiler_daemon /system/bin/profiler_daemon
     group root
     disabled
 
-service charger /charger
+service charger /sbin/chargeonlymode
     class charger
     group system graphics
     seclabel u:r:charger:s0
@@ -1110,13 +1110,12 @@ service esepmdaemon /system/vendor/bin/esepmdaemon
     group nfc
 
 on charger
-    wait /dev/block/bootdevice/by-name/system
-    mount ext4 /dev/block/bootdevice/by-name/system /system ro barrier=1
     setprop persist.sys.usb.config adb
     setprop sys.usb.config adb
     load_system_props
     start qcom-post-boot
     start leds-sh
+    start thermal-engine
 
 #add poweroffhandler
 service poweroffhandler /system/vendor/bin/poweroffhandler

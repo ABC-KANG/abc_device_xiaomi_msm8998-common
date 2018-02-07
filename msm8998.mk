@@ -128,6 +128,10 @@ PRODUCT_PACKAGES += \
     SnapdragonCamera2 \
     libshim_MiCamera
 
+# Charger
+PRODUCT_PACKAGES += \
+    chargeonlymode
+
 # Connectivity Engine support (CNE)
 PRODUCT_PACKAGES += \
     cneapiclient \
