@@ -150,10 +150,6 @@ PRODUCT_PACKAGES += \
     liboverlay \
     libtinyxml
 
-# Fingerprint wrapper
-PRODUCT_PACKAGES += \
-    fingerprint.msm8998
-
 # For config.fs
 PRODUCT_PACKAGES += \
     fs_config_files
