@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2017 The Android Open Source Project
- * Copyright (C) 2017 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +14,12 @@
  * limitations under the License.
  */
 
-#ifdef V1_0_HAL
-#define LOG_TAG "android.hardware.power@1.0-service.msm8998"
-#else
 #define LOG_TAG "android.hardware.power@1.1-service.msm8998"
-#endif
 
 #include <android/log.h>
+#include <android-base/file.h>
+#include <android-base/properties.h>
+#include <android-base/strings.h>
 #include <utils/Log.h>
 #include "Power.h"
 #include "power-common.h"
@@ -35,104 +33,70 @@ extern struct stat_pair rpm_stat_map[];
 namespace android {
 namespace hardware {
 namespace power {
-#ifdef V1_0_HAL
-namespace V1_0 {
-#else
 namespace V1_1 {
-#endif
 namespace implementation {
 
 using ::android::hardware::power::V1_0::Feature;
 using ::android::hardware::power::V1_0::PowerHint;
 using ::android::hardware::power::V1_0::PowerStatePlatformSleepState;
 using ::android::hardware::power::V1_0::Status;
-#ifndef V1_0_HAL
 using ::android::hardware::power::V1_1::PowerStateSubsystem;
-#endif
 using ::android::hardware::hidl_vec;
 using ::android::hardware::Return;
 using ::android::hardware::Void;
 
 Power::Power() {
     power_init();
+    mInteractionHandler.Init();
 }
 
 // Methods from ::android::hardware::power::V1_0::IPower follow.
 Return<void> Power::setInteractive(bool interactive)  {
+    if (!isSupportedGovernor()) {
+        return Void();
+    }
     power_set_interactive(interactive ? 1 : 0);
     return Void();
 }
 
 Return<void> Power::powerHint(PowerHint hint, int32_t data) {
-    power_hint(static_cast<power_hint_t>(hint), data ? (&data) : NULL);
+    if (android::base::GetProperty("init.svc.perfd", "") != "running") {
+        ALOGW("perfd is not started");
+        return Void();
+    }
+
+    power_hint_t h = static_cast<power_hint_t>(hint);
+    if (!isSupportedGovernor()) {
+        return Void();
+    }
+    if (h == POWER_HINT_INTERACTION) {
+        mInteractionHandler.Acquire(data);
+        return Void();
+    }
+    power_hint(h, data ? &data : NULL);
     return Void();
 }
 
-Return<void> Power::setFeature(Feature feature, bool activate)  {
-    set_feature(static_cast<feature_t>(feature), activate ? 1 : 0);
+Return<void> Power::setFeature(Feature /*feature*/, bool /*activate*/)  {
+    //Nothing to do
     return Void();
 }
 
 Return<void> Power::getPlatformLowPowerStats(getPlatformLowPowerStats_cb _hidl_cb) {
+
     hidl_vec<PowerStatePlatformSleepState> states;
     uint64_t stats[MAX_PLATFORM_STATS * MAX_RPM_PARAMS] = {0};
     uint64_t *values;
     struct PowerStatePlatformSleepState *state;
     int ret;
 
+    states.resize(PLATFORM_SLEEP_MODES_COUNT);
+
     ret = extract_platform_stats(stats);
     if (ret != 0) {
         states.resize(0);
         goto done;
     }
-
-#ifdef LEGACY_STATS
-    states.resize(RPM_MODE_MAX);
-
-    /* Update statistics for XO_shutdown */
-    state = &states[RPM_MODE_XO];
-    state->name = "XO_shutdown";
-
-    state->residencyInMsecSinceBoot = stats[ACCUMULATED_VLOW_TIME];
-    state->totalTransitions = stats[VLOW_COUNT];
-    state->supportedOnlyInSuspend = false;
-    state->voters.resize(XO_VOTERS);
-
-    /* Update statistics for APSS voter */
-    state->voters[0].name = "APSS";
-    state->voters[0].totalTimeInMsecVotedForSinceBoot =
-        stats[XO_ACCUMULATED_DURATION_APSS] / RPM_CLK;
-    state->voters[0].totalNumberOfTimesVotedSinceBoot = stats[XO_COUNT_APSS];
-
-    /* Update statistics for MPSS voter */
-    state->voters[1].name = "MPSS";
-    state->voters[1].totalTimeInMsecVotedForSinceBoot =
-        stats[XO_ACCUMULATED_DURATION_MPSS] / RPM_CLK;
-    state->voters[1].totalNumberOfTimesVotedSinceBoot = stats[XO_COUNT_MPSS];
-
-    /* Update statistics for ADSP voter */
-    state->voters[2].name = "ADSP";
-    state->voters[2].totalTimeInMsecVotedForSinceBoot =
-        stats[XO_ACCUMULATED_DURATION_ADSP] / RPM_CLK;
-    state->voters[2].totalNumberOfTimesVotedSinceBoot = stats[XO_COUNT_ADSP];
-
-    /* Update statistics for SLPI voter */
-    state->voters[3].name = "SLPI";
-    state->voters[3].totalTimeInMsecVotedForSinceBoot =
-        stats[XO_ACCUMULATED_DURATION_SLPI] / RPM_CLK;
-    state->voters[3].totalNumberOfTimesVotedSinceBoot = stats[XO_COUNT_SLPI];
-
-    /* Update statistics for VMIN state */
-    state = &states[RPM_MODE_VMIN];
-
-    state->name = "VMIN";
-    state->residencyInMsecSinceBoot = stats[ACCUMULATED_VMIN_TIME];
-    state->totalTransitions = stats[VMIN_COUNT];
-    state->supportedOnlyInSuspend = false;
-    state->voters.resize(VMIN_VOTERS);
-    //Note: No filling of state voters since VMIN_VOTERS = 0
-#else
-    states.resize(PLATFORM_SLEEP_MODES_COUNT);
 
     /* Update statistics for XO_shutdown */
     state = &states[RPM_MODE_XO];
@@ -144,7 +108,7 @@ Return<void> Power::getPlatformLowPowerStats(getPlatformLowPowerStats_cb _hidl_c
     state->supportedOnlyInSuspend = false;
     state->voters.resize(XO_VOTERS);
     for(size_t i = 0; i < XO_VOTERS; i++) {
-        int voter = i + XO_VOTERS_START;
+        int voter = static_cast<int>(i + XO_VOTERS_START);
         state->voters[i].name = rpm_stat_map[voter].label;
         values = stats + (voter * MAX_RPM_PARAMS);
         state->voters[i].totalTimeInMsecVotedForSinceBoot = values[0] / RPM_CLK;
@@ -161,14 +125,11 @@ Return<void> Power::getPlatformLowPowerStats(getPlatformLowPowerStats_cb _hidl_c
     state->supportedOnlyInSuspend = false;
     state->voters.resize(VMIN_VOTERS);
     //Note: No filling of state voters since VMIN_VOTERS = 0
-#endif
+
 done:
     _hidl_cb(states, Status::SUCCESS);
     return Void();
 }
-
-#ifndef V1_0_HAL
-// Methods from ::android::hardware::power::V1_1::IPower follow.
 
 static int get_wlan_low_power_stats(struct PowerStateSubsystem &subsystem) {
 
@@ -202,15 +163,16 @@ static int get_wlan_low_power_stats(struct PowerStateSubsystem &subsystem) {
     return 0;
 }
 
+// Methods from ::android::hardware::power::V1_1::IPower follow.
 Return<void> Power::getSubsystemLowPowerStats(getSubsystemLowPowerStats_cb _hidl_cb) {
 
     hidl_vec<PowerStateSubsystem> subsystems;
     int ret;
 
-    subsystems.resize(subsystem_type::SUBSYSTEM_COUNT);
+    subsystems.resize(SUBSYSTEM_COUNT);
 
     //We currently have only one Subsystem for WLAN
-    ret = get_wlan_low_power_stats(subsystems[subsystem_type::SUBSYSTEM_WLAN]);
+    ret = get_wlan_low_power_stats(subsystems[SUBSYSTEM_WLAN]);
     if (ret != 0)
         goto done;
 
@@ -221,14 +183,27 @@ done:
     return Void();
 }
 
+bool Power::isSupportedGovernor() {
+    std::string buf;
+    if (android::base::ReadFileToString(SCALING_GOVERNOR_PATH, &buf)) {
+        buf = android::base::Trim(buf);
+    }
+    // Only support EAS 1.2, legacy EAS and HMP
+    if (buf == SCHEDUTIL_GOVERNOR || buf == SCHED_GOVERNOR || buf == INTERACTIVE_GOVERNOR) {
+        return true;
+    } else {
+        ALOGE("Governor not supported by powerHAL, skipping");
+        return false;
+    }
+}
+
 Return<void> Power::powerHintAsync(PowerHint hint, int32_t data) {
     // just call the normal power hint in this oneway function
     return powerHint(hint, data);
 }
-#endif
 
 }  // namespace implementation
-}  // namespace V1_0/1
+}  // namespace V1_1
 }  // namespace power
 }  // namespace hardware
 }  // namespace android

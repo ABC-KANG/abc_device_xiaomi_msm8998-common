@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2017 The Android Open Source Project
- * Copyright (C) 2017 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +14,7 @@
  * limitations under the License.
  */
 
-#ifdef V1_0_HAL
-#define LOG_TAG "android.hardware.power@1.0-service.msm8998"
-#else
 #define LOG_TAG "android.hardware.power@1.1-service.msm8998"
-#endif
 
 #include <android/log.h>
 #include <hidl/HidlTransportSupport.h>
@@ -35,24 +30,15 @@ using android::hardware::configureRpcThreadpool;
 using android::hardware::joinRpcThreadpool;
 
 // Generated HIDL files
-#ifdef V1_0_HAL
-using android::hardware::power::V1_0::IPower;
-using android::hardware::power::V1_0::implementation::Power;
-#else
 using android::hardware::power::V1_1::IPower;
 using android::hardware::power::V1_1::implementation::Power;
-#endif
 
 int main() {
 
     status_t status;
     android::sp<IPower> service = nullptr;
 
-#ifdef V1_0_HAL
-    ALOGI("Power HAL Service 1.0 for QCOM is starting.");
-#else
-    ALOGI("Power HAL Service 1.1 for QCOM is starting.");
-#endif
+    ALOGI("Power HAL Service 1.1 is starting.");
 
     service = new Power();
     if (service == nullptr) {

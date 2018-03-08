@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2017, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2017, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -36,27 +36,6 @@ extern "C" {
 
 #include "hardware/power.h"
 
-#ifdef LEGACY_STATS
-enum platform_param_id {
-    VLOW_COUNT = 0,
-    ACCUMULATED_VLOW_TIME,
-    VMIN_COUNT,
-    ACCUMULATED_VMIN_TIME,
-    RPM_PARAM_COUNT,
-
-    XO_ACCUMULATED_DURATION_APSS = RPM_PARAM_COUNT,
-    XO_COUNT_APSS,
-    XO_ACCUMULATED_DURATION_MPSS,
-    XO_COUNT_MPSS,
-    XO_ACCUMULATED_DURATION_ADSP,
-    XO_COUNT_ADSP,
-    XO_ACCUMULATED_DURATION_SLPI,
-    XO_COUNT_SLPI,
-
-    //Don't add any lines after that line
-    PLATFORM_PARAM_COUNT
-};
-#endif
 
 enum stats_type {
     //Platform Stats
@@ -70,23 +49,18 @@ enum stats_type {
     VOTER_SLPI,
     MAX_PLATFORM_STATS,
 
-#ifndef V1_0_HAL
     //WLAN Stats
     WLAN_POWER_DEBUG_STATS = 0,
     MAX_WLAN_STATS,
-#endif
 };
 
 enum subsystem_type {
-#ifndef V1_0_HAL
     SUBSYSTEM_WLAN = 0,
-#endif
 
     //Don't add any lines after this line
     SUBSYSTEM_COUNT
 };
 
-#ifndef V1_0_HAL
 enum wlan_sleep_states {
     WLAN_STATE_ACTIVE = 0,
     WLAN_STATE_DEEP_SLEEP,
@@ -104,16 +78,12 @@ enum wlan_power_params {
     //Don't add any lines after this line
     WLAN_POWER_PARAMS_COUNT
 };
-#endif
+
 
 #define PLATFORM_SLEEP_MODES_COUNT RPM_MODE_MAX
 
 #define MAX_RPM_PARAMS 2
-#ifdef LEGACY_STATS
-#define XO_VOTERS 4
-#else
 #define XO_VOTERS (MAX_PLATFORM_STATS - XO_VOTERS_START)
-#endif
 #define VMIN_VOTERS 0
 
 struct stat_pair {
@@ -127,11 +97,10 @@ struct stat_pair {
 void power_init(void);
 void power_hint(power_hint_t hint, void *data);
 void power_set_interactive(int on);
-void set_feature(feature_t feature, int state);
 int extract_platform_stats(uint64_t *list);
-#ifndef V1_0_HAL
 int extract_wlan_stats(uint64_t *list);
-#endif
+
+int is_perf_hint_active(int hint);
 
 #ifdef __cplusplus
 }

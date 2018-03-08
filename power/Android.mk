@@ -23,9 +23,9 @@ LOCAL_MODULE_TAGS := optional
 
 LOCAL_MODULE := android.hardware.power@1.1-service.msm8998
 LOCAL_INIT_RC := android.hardware.power@1.1-service.msm8998.rc
-LOCAL_SRC_FILES := \
-    service.cpp \
+LOCAL_SRC_FILES := service.cpp \
     Power.cpp \
+    InteractionHandler.cpp \
     power-helper.c \
     metadata-parser.c \
     utils.c \
@@ -39,14 +39,12 @@ LOCAL_C_INCLUDES := external/libxml2/include \
 # Include target-specific files.
 LOCAL_SRC_FILES += power-8998.c
 
-ifneq ($(TARGET_TAP_TO_WAKE_NODE),)
-    LOCAL_CFLAGS += -DTAP_TO_WAKE_NODE=\"$(TARGET_TAP_TO_WAKE_NODE)\"
-endif
 
 # Enable interaction boost all the time
 LOCAL_CFLAGS += -DINTERACTION_BOOST -Werror
 
 LOCAL_SHARED_LIBRARIES := \
+    libbase \
     liblog \
     libcutils \
     libdl \
@@ -55,6 +53,6 @@ LOCAL_SHARED_LIBRARIES := \
     libhidltransport \
     libhardware \
     libutils \
-    android.hardware.power@1.1
+    android.hardware.power@1.1 \
 
 include $(BUILD_EXECUTABLE)
