@@ -83,6 +83,7 @@ on post-fs-data
 
 on property:sys.post_boot.parsed=1
     swapon_all /vendor/etc/fstab.qcom
+    start perfd
 
 service per_mgr /vendor/bin/pm-service
     class core
