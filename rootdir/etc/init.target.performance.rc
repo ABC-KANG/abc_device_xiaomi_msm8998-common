@@ -12,6 +12,14 @@ on init
     write /dev/stune/top-app/schedtune.sched_boost_no_override 1
     write /dev/stune/schedtune.colocate 0
 
+    # Add a cpuset for the camera daemon
+    mkdir /dev/cpuset/camera-daemon 0750 cameraserver cameraserver
+    write /dev/cpuset/camera-daemon/cpus 0-7
+    write /dev/cpuset/camera-daemon/mems 0
+
+    chmod 0660 /dev/cpuset/camera-daemon/tasks
+    chown cameraserver cameraserver /dev/cpuset/camera-daemon/tasks
+
 # For cpusets initialize for Silver Only first and then Silver + Gold
 # Silver Only configuration cannot work with 0-7
 on boot
@@ -20,14 +28,6 @@ on boot
     write /dev/cpuset/foreground/cpus 0-7
     write /dev/cpuset/top-app/cpus 0-7
     write /dev/cpuset/system-background/cpus 0-7
-
-    # Create camera daemon cpusets
-    mkdir /dev/cpuset/camera-daemon 0750 cameraserver cameraserver
-    write /dev/cpuset/camera-daemon/cpus 0
-    write /dev/cpuset/camera-daemon/mems 0
-
-    chmod 0660 /dev/cpuset/camera-daemon/tasks
-    chown cameraserver cameraserver /dev/cpuset/camera-daemon/tasks
 
 on charger
     # Enable UFS powersaving
