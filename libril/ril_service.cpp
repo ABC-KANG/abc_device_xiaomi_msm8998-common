@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define LOG_TAG "RILC"
+#define LOG_TAG "RILCust"
 
 #include <android/hardware/radio/1.1/IRadio.h>
 #include <android/hardware/radio/1.1/IRadioResponse.h>
@@ -3857,6 +3857,15 @@ int radio::getDataRegistrationStateResponse(int slotId,
             } else {
                 char **resp = (char **) response;
                 dataRegResponse.regState = (RegState) ATOI_NULL_HANDLED_DEF(resp[0], 4);
+
+                /* Our RIL reports a value of 20 for DC-HSPAP. However, this is not
+                 supported in AOSP leaving signal cluster view in Status Bar without
+                 H+ icon for mobile data. Map it to HSPAP to get data icon back */ 
+                if (resp[3] != NULL && strncmp(resp[3], "20", 2) == 0) {
+                    strncpy(resp[3], "15", 2);
+                    RLOGI("Fooling AOSP: remapping DC-HSPAP RAT=20 to HSPAP RAT=%s", resp[3]);
+                }
+
                 dataRegResponse.rat =  ATOI_NULL_HANDLED_DEF(resp[3], 0);
                 dataRegResponse.reasonDataDenied =  ATOI_NULL_HANDLED(resp[4]);
                 dataRegResponse.maxDataCalls =  ATOI_NULL_HANDLED_DEF(resp[5], 1);
