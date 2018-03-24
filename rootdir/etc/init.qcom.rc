@@ -335,6 +335,13 @@ service panel-info /vendor/bin/init.panel_info.sh
     user root
     oneshot
 
+service vendor.wlan_sh /vendor/bin/init.qcom.wlan.sh
+    class main
+    user root
+    group root
+    disabled
+    oneshot
+
 service ril-daemon2 /vendor/bin/hw/rild -c 2
     class main
     socket rild2 stream 660 root radio
@@ -358,3 +365,7 @@ service time_daemon /vendor/bin/time_daemon
     user root
     group root
     writepid /dev/cpuset/system-background/tasks
+
+on property:wlan.driver.status=ok
+   # Get the wlan driver/fw version
+   start vendor.wlan_sh
