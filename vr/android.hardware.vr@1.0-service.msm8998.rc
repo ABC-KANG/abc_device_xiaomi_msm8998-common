@@ -1,0 +1,4 @@
+service vr-msm8998-1-0 /vendor/bin/hw/android.hardware.vr@1.0-service.msm8998
+    class hal
+    user system
+    group system
