@@ -50,16 +50,6 @@ namespace init {
 char const *heapminfree;
 char const *heapmaxfree;
 
-static void init_finger_print_properties()
-{
-        if (access("/persist/fpc/calibration_image.pndat", 0) == -1) {
-                property_set("ro.boot.fingerprint", "goodix");
-        } else {
-                property_set("ro.boot.fingerprint", "fpc");
-        }
-}
-
-
 static void init_alarm_boot_properties()
 {
     char const *boot_reason_file = "/proc/sys/kernel/boot_reason";
@@ -103,7 +93,7 @@ void vendor_load_properties()
         return;
 
     init_alarm_boot_properties();
-    init_finger_print_properties();}
 
+}
 }  // namespace init
 }  // namespace android
