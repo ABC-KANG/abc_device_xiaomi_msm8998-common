@@ -80,16 +80,11 @@ on post-fs
 
     insmod /vendor/lib/modules/exfat.ko
 
-    # Loggy
-    #service kernel_loggy /system/bin/sh /klog.sh
-    #    class main  class main
-    #    user root   user root
-    #    oneshot oneshot
-
-    service system_loggy /system/bin/sh /slog.sh
-        class main  class main
-        user root   user root
-        oneshot oneshot
+#    service system_loggy /system/bin/logcat -b all -v threadtime -D -f /cache/logcat.log
+#    service system_loggy /system/bin/logcat -f /cache/logcat.log
+#        class main  class main
+#        user root   user root
+#        oneshot oneshot
 
 # OTG support
 on property:persist.sys.oem.otg_support=true
@@ -106,6 +101,7 @@ on post-fs-data
     mkdir /data/vendor/hbtp 0750 system system
     mkdir /data/misc/qvr 0770 system system
     mkdir /data/nfc 0770 nfc nfc
+    mkdir /data/vendor/nfc 0770 nfc nfc
     mkdir /data/thermal 0771 system system
     mkdir /data/thermal/config 0771 system system
     chown system system /dev/sysmatdrv
