@@ -18,3 +18,6 @@ allow hal_bluetooth system_server:binder call;
 set_prop(hal_bluetooth_default, bluetooth_prop)
 
 allow hal_bluetooth_default sysfs_bt_device:file write;
+
+allow hal_bluetooth_default bluetooth_data_file:dir { add_name write };
+allow hal_bluetooth_default bluetooth_data_file:file create;

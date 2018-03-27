@@ -40,5 +40,5 @@ allow init proc:lnk_file setattr;
 allow init sysfs_power_supply:dir write;
 
 #neverallow
-dontaudit init bt_firmware_file:dir create;
-dontaudit init firmware_file:dir create;
+dontaudit init bt_firmware_file:dir { create setattr };
+dontaudit init firmware_file:dir { create setattr };
