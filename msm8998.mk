@@ -287,9 +287,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_BOOT_JARS += \
     qcrilhook \
     telephony-ext \
-    tcmiface
-
-#    WfdCommon
+    tcmiface \
+    WfdCommon
 
 # Seccomp policy
 PRODUCT_COPY_FILES += \
