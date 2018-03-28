@@ -97,7 +97,10 @@ PRODUCT_PACKAGES += \
     libqcomvisualizer \
     libqcomvoiceprocessing \
     libvolumelistener \
-    tinymix
+    tinymix \
+    libqahw \
+    libOmxG711Enc \
+    libhwacceffectswrapper
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio/audio_output_policy.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_output_policy.conf \
@@ -297,10 +300,18 @@ PRODUCT_BOOT_JARS += \
     tcmiface \
     WfdCommon
 
+PRODUCT_PACKAGES += \
+    tcmiface
+
 # Seccomp policy
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/seccomp_policy/mediacodec-seccomp.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy \
     $(LOCAL_PATH)/seccomp_policy/mediaextractor-seccomp.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediaextractor.policy \
+
+# Thermal and vr
+PRODUCT_PACKAGES += \
+    vr.msm8998 \
+    thermal.msm8998
 
 # Tetheroffload
 PRODUCT_PACKAGES += \
