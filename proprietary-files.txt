@@ -705,6 +705,7 @@ vendor/lib64/vendor.display.config@1.0.so|cc4e187a99e39a621779ae322ac918c020bdfb
 vendor/lib/vendor.display.config@1.0.so|36d6c213fb44388c4ec474e7948037c80513b7c2
 
 # QMI
+bin/mmbn-daemon:vendor/bin/mmbn-daemon
 vendor/bin/irsc_util
 etc/permissions/qti_libpermissions.xml
 etc/permissions/qti_permissions.xml
