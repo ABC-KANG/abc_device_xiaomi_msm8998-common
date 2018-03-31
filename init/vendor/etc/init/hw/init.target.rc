@@ -29,7 +29,6 @@
 import init.offline.log.rc
 
 on early-init
-    exec u:r:modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules wlan
     mkdir /firmware 0771 system system
     mkdir /bt_firmware 0771 system system
     symlink /data/tombstones /tombstones
@@ -43,8 +42,6 @@ on init
 
     write /sys/devices/soc/c179000.i2c/i2c-5/5-0020/input/input1/reversed_keys 1
     write /sys/devices/soc/c179000.i2c/i2c-5/5-0020/input/input7/reversed_keys 1
-
-    chown wifi wifi /sys/module/wlan/parameters/fwpath
 
     # Disable UFS powersaving
     write /sys/devices/soc/1da4000.ufshc/clkscale_enable 0
@@ -212,15 +209,10 @@ on boot
     chown system system /persist/speccfg/submask
     chown system system /persist/speccfg/partition
 
-# access permission for Speaker SmartPA
+    # access permission for Speaker SmartPA
     chmod 0666 /dev/i2c-10
     chmod 0777 /dev/elliptic0
     chmod 0777 /dev/elliptic1
-
-#Load WLAN driver
-    insmod /system/lib/modules/wlan.ko
-    setprop wlan.driver.status "ok"
-    chown wifi wifi /sys/module/wlan/parameters/fwpath
 
     chown system system /sys/bus/platform/devices/soc:fingerprint_fpc/irq
     chown system system /sys/bus/platform/devices/soc:fingerprint_fpc/irq_enable
@@ -280,6 +272,9 @@ on boot
     chown system system /proc/touchpanel/double_tap_enable
     chmod 0660 /proc/touchpanel/double_tap_enable
     write /proc/touchpanel/double_tap_enable 1
+
+    # Wifi firmware reload path
+    chown wifi wifi /sys/module/wlan/parameters/fwpath
 
 on property:ro.boot.fingerprint=fpc
     setprop ro.hardware.fingerprint fpc
