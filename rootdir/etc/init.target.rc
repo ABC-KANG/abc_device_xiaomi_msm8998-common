@@ -26,11 +26,27 @@
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 #
+import init.offline.log.rc
 
 on early-init
+    mkdir /firmware 0771 system system
+    mkdir /bt_firmware 0771 system system
     symlink /data/tombstones /tombstones
+    mkdir /dsp 0771 media media
 
 on init
+    # Goodix fingerprint
+    chown system system /dev/goodix_fp
+
+    write /sys/devices/soc/c179000.i2c/i2c-5/5-0020/input/input1/reversed_keys 1
+    write /sys/devices/soc/c179000.i2c/i2c-5/5-0020/input/input7/reversed_keys 1
+
+    # Disable UFS powersaving
+    write /sys/devices/soc/1da4000.ufshc/clkscale_enable 0
+    write /sys/devices/soc/1da4000.ufshc/clkgate_enable 0
+    write /sys/devices/soc/1da4000.ufshc/hibern8_on_idle_enable 0
+    write /sys/module/lpm_levels/parameters/sleep_disabled Y
+
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
 
     # Set up schedtune
@@ -90,11 +106,22 @@ on init
     chown cameraserver cameraserver /dev/cpuset/camera-daemon/tasks
     chmod 0660 /dev/cpuset/camera-daemon/tasks
 
-on fs
+    # wait for bootdevice and symlink early
     wait /dev/block/platform/soc/1da4000.ufshc
     symlink /dev/block/platform/soc/1da4000.ufshc /dev/block/bootdevice
-    mount_all /vendor/etc/fstab.qcom --early
-    swapon_all /vendor/etc/fstab.qcom
+    restorecon_recursive /dev/block/bootdevice
+
+    # start qseecomd early as we mount system/ early
+    # vold needs keymaster that needs qseecomd
+    start qseecomd
+
+on fs
+    mount_all fstab.qcom
+    swapon_all fstab.qcom
+
+    # Keeping following partitions outside fstab file. As user may not have
+    # these partition flashed on the device. Failure to mount any partition in fstab file
+    # results in failure to launch late-start class.
 
     restorecon_recursive /persist
     mkdir /persist/data 0700 system system
@@ -102,45 +129,59 @@ on fs
 
     mkdir /persist/audio 0755 system system
     mkdir /persist/subsys 0700 system system
+    chmod 644 /persist/audio/us_manual_cal
     chown system system /dev/tiload_node
     chmod 660 /dev/tiload_node
 
-    # Start HW service manager early
-    start hwservicemanager
-
-    # Start qseecomd early
-    # vold needs keymaster which needs qseecomd
-    start qseecomd
-
-on late-fs
-    # Start devices by sysfs trigger
-    write /sys/kernel/boot_adsp/boot 1
-    write /sys/kernel/boot_slpi/boot 1
-
-    # Start services for bootanim
-    start surfaceflinger
-    start bootanim
-    start hwcomposer-2-1
-    start configstore-hal-1-0
-    start gralloc-2-0
-
-    mount_all /vendor/etc/fstab.qcom --late
-
 on post-fs
-    write /dev/ipa 1
-
+    # Wait qseecomd started
     wait_for_prop sys.listeners.registered true
 
+    write /dev/ipa 1
+
+    insmod /vendor/lib/modules/exfat.ko
+
+# OTG support
+on property:persist.sys.oem.otg_support=true
+    write /sys/class/power_supply/usb/otg_switch 1
+on property:persist.sys.oem.otg_support=false
+    write /sys/class/power_supply/usb/otg_switch 0
+
 on post-fs-data
+    mkdir /data/vendor/hbtp 0750 system system
+    mkdir /persist/qti_fp 0700 system system
+    mkdir /data/misc/seemp 0700 system system
+    mkdir /data/misc/fpc 0770 system system
+    mkdir /data/misc/goodix 0770 system system
+    mkdir /persist/fpc 0770 system system
+
     mkdir /data/tombstones 0771 system system
     mkdir /tombstones/modem 0771 system system
     mkdir /tombstones/lpass 0771 system system
     mkdir /tombstones/wcnss 0771 system system
     mkdir /tombstones/dsps 0771 system system
+    mkdir /data/vendor/hbtp 0750 system system
     mkdir /data/misc/qvr 0770 system system
     mkdir /data/nfc 0770 nfc nfc
+    mkdir /data/vendor/nfc 0770 nfc nfc
     mkdir /data/thermal 0771 system system
     mkdir /data/thermal/config 0771 system system
+    chown system system /dev/sysmatdrv
+    chmod 0660 /dev/sysmatdrv
+#QDCM config file for sagit
+    copy /system/etc/calib.cfg /data/vendor/display/calib.cfg
+    copy /system/etc/qdcm_calib_data_jdi_fhd_cmd_incell_dsi_panel.xml /data/vendor/display/qdcm_calib_data_jdi_fhd_cmd_incell_dsi_panel.xml
+    copy /system/etc/qdcm_calib_data_lgd_fhd_cmd_incell_dsi_panel.xml /data/vendor/display/qdcm_calib_data_lgd_fhd_cmd_incell_dsi_panel.xml
+    copy /system/etc/jdi_fhd_cmd_incell_dsi_panel_ct.xml /data/vendor/display/jdi_fhd_cmd_incell_dsi_panel_ct.xml
+    chmod 0644 /data/vendor/display/calib.cfg
+    chmod 0644 /data/vendor/display/qdcm_calib_data_jdi_fhd_cmd_incell_dsi_panel.xml
+    chmod 0644 /data/vendor/display/qdcm_calib_data_lgd_fhd_cmd_incell_dsi_panel.xml
+    chmod 0644 /data/vendor/display/jdi_fhd_cmd_incell_dsi_panel_ct.xml
+#QDCM config file for chiron
+    copy /system/etc/jdi_fhd_video_dsi_panel_ct.xml /data/vendor/display/jdi_fhd_video_dsi_panel_ct.xml
+    copy /system/etc/qdcm_calib_data_jdi_fhd_video_dsi_panel.xml /data/vendor/display/qdcm_calib_data_jdi_fhd_video_dsi_panel.xml
+    chmod 0644 /data/vendor/display/jdi_fhd_video_dsi_panel_ct.xml
+    chmod 0644 /data/vendor/display/qdcm_calib_data_jdi_fhd_video_dsi_panel.xml
 
     # Set aggressive read ahead for sda and sde during boot up
     # sda stores /userdata
@@ -150,15 +191,107 @@ on post-fs-data
 
 on boot
     start rmt_storage
+    start rfs_access
 
-    # Elliptic sysfs
+    ####Regionalization config and prop files####
+    chmod 0644 /persist/speccfg/spec
+    chmod 0644 /persist/speccfg/devicetype
+    chmod 0644 /persist/speccfg/mbnversion
+    chmod 0644 /persist/speccfg/.not_triggered
+    chmod 0644 /persist/speccfg/vendor_ro.prop
+    chmod 0644 /persist/speccfg/vendor_persist.prop
+    chmod 0644 /persist/speccfg/submask
+    chmod 0644 /persist/speccfg/partition
+    chown system system /persist/speccfg/spec
+    chown system system /persist/speccfg/devicetype
+    chown system system /persist/speccfg/mbnversion
+    chown system system /persist/speccfg/.not_triggered
+    chown system system /persist/speccfg/vendor_ro.prop
+    chown system system /persist/speccfg/vendor_persist.prop
+    chown system system /persist/speccfg/submask
+    chown system system /persist/speccfg/partition
+
+    # access permission for Speaker SmartPA
     chmod 0666 /dev/i2c-10
-
     chmod 0777 /dev/elliptic0
     chmod 0777 /dev/elliptic1
 
+    chown system system /sys/bus/platform/devices/soc:fingerprint_fpc/irq
+    chown system system /sys/bus/platform/devices/soc:fingerprint_fpc/irq_enable
+    chown system system /sys/bus/platform/devices/soc:fingerprint_fpc/wakeup_enable
+    chown system system /sys/bus/platform/devices/soc:fingerprint_fpc/hw_reset
+    chown system system /sys/bus/platform/devices/soc:fingerprint_fpc/device_prepare
+    chown system system /sys/bus/platform/devices/soc:fingerprint_fpc/fingerdown_wait
+    chown system system /sys/bus/platform/devices/soc:fingerprint_fpc/vendor
+    chown system system /data/misc/fpc/calibration_image.pndat
+    chmod 0700 /sys/bus/platform/devices/soc:fingerprint_fpc/irq
+    chmod 0700 /sys/bus/platform/devices/soc:fingerprint_fpc/wakeup_enable
+    chmod 0700 /sys/bus/platform/devices/soc:fingerprint_fpc/hw_reset
+    chmod 0700 /sys/bus/platform/devices/soc:fingerprint_fpc/device_prepare
+    chmod 0700 /sys/bus/platform/devices/soc:fingerprint_fpc/vendor
+    chmod 0600 /data/misc/fpc/calibration_image.pndat
+
+    # RGB lights
+    chown system system /sys/class/leds/white/brightness
+    chown system system /sys/class/leds/white/pause_lo
+    chown system system /sys/class/leds/white/pause_hi
+    chown system system /sys/class/leds/white/blink
+    chown system system /sys/class/leds/white/ramp_step_ms
+    chown system system /sys/class/leds/white/duty_pcts
+    chown system system /sys/class/leds/white/start_idx
+
+    chmod 660 /sys/class/leds/white/brightness
+    chmod 660 /sys/class/leds/white/ramp_step_ms
+    chmod 660 /sys/class/leds/white/duty_pcts
+    chmod 660 /sys/class/leds/white/start_idx
+    chown system system /sys/class/leds/white/pause_lo
+    chown system system /sys/class/leds/white/pause_hi
+
+    # LED torch permissions
+    chmod 0666 /sys/class/leds/led:torch_0/brightness
+    chmod 0666 /sys/class/leds/led:torch_1/brightness
+    chmod 0666 /sys/class/leds/led:switch_0/brightness
+    chmod 0666 /sys/class/leds/led:switch_1/brightness
+
+    # Button backlight permissions
+    chown system system /sys/class/leds/button-backlight1/brightness
+
+    # KeyDisabler permissions
+    chown system system /proc/touchpanel/capacitive_keys_enable
+    chown system system /sys/module/gf_spi/parameters/report_home_events
+    chown system system /sys/devices/soc/soc:fingerprint_fpc/enable_key_events
+    chmod 0660 /proc/touchpanel/capacitive_keys_enable
+    chmod 0660 /sys/module/gf_spi/parameters/report_home_events
+    chmod 0660 /sys/devices/soc/soc:fingerprint_fpc/enable_key_events
+
+    chown system system /proc/touchpanel
+    chown system system /sys/devices/soc/c179000.i2c/i2c-5/5-0020/input/input1/0dbutton
+    chown system system /sys/devices/soc/c179000.i2c/i2c-5/5-0020/input/input1/wake_gesture
+    chown system system /sys/devices/soc/c179000.i2c/i2c-5/5-0020/input/input1/reversed_keys_enable
+    chmod 0660 /sys/devices/soc/c179000.i2c/i2c-5/5-0020/input/input1/0dbutton
+    chmod 0660 /sys/devices/soc/c179000.i2c/i2c-5/5-0020/input/input1/wake_gesture
+    chmod 0660 /sys/devices/soc/c179000.i2c/i2c-5/5-0020/input/input1/reversed_keys_enable
+    chown system system /proc/touchpanel/double_tap_enable
+    chmod 0660 /proc/touchpanel/double_tap_enable
+    write /proc/touchpanel/double_tap_enable 1
+
+    # Wifi firmware reload path
+    chown wifi wifi /sys/module/wlan/parameters/fwpath
+
+on property:ro.boot.fingerprint=fpc
+    setprop ro.hardware.fingerprint fpc
+ 
+on property:ro.boot.fingerprint=goodix
+    setprop ro.hardware.fingerprint goodix
+
+on property:wc_transport.start_root=true
+    start hci_filter_root
+
+on property:wc_transport.start_root=false
+    stop hci_filter_root
+
 on property:sys.boot_completed=1
-    setprop sys.io.scheduler "bfq"
+    setprop sys.io.scheduler "cfq"
 
     write /dev/cpuset/top-app/cpus 0-7
     write /dev/cpuset/foreground/boost/cpus 0-3,6-7
@@ -175,11 +308,18 @@ on property:sys.boot_completed=1
 
     start qcom-post-boot
 
+    # Enable UFS powersaving
+    write /sys/devices/soc/1da4000.ufshc/clkscale_enable 1
+    write /sys/devices/soc/1da4000.ufshc/clkgate_enable 1
+    write /sys/devices/soc/1da4000.ufshc/hibern8_on_idle_enable 1
+
+#Peripheral manager
 service per_mgr /vendor/bin/pm-service
     class core
     user system
     group system
     ioprio rt 4
+    shutdown critical
 
 service per_proxy /vendor/bin/pm-proxy
     class core
@@ -194,6 +334,10 @@ on property:sys.shutdown.requested=*
     stop per_proxy
 
 on charger
+    # Enable UFS powersaving
+    write /sys/devices/soc/1da4000.ufshc/clkscale_enable 1
+    write /sys/devices/soc/1da4000.ufshc/clkgate_enable 1
+    write /sys/devices/soc/1da4000.ufshc/hibern8_on_idle_enable 1
     write /sys/class/input/input0/enabled 0
     write /sys/class/input/input1/enabled 0
     write /sys/class/input/input2/enabled 0
@@ -219,10 +363,19 @@ on charger
     setprop sys.usb.configfs 1
     start thermal-engine
 
+on property:ro.boot.audio=chiron-s
+    export ADSP_LIBRARY_PATH "/system/vendor/lib/rfsa/adsp/chiron-s;/system/lib/rfsa/adsp;/system/vendor/lib/rfsa/adsp;/dsp"
+
 service qseecomd /vendor/bin/qseecomd
     class core
     user root
     group root
+    shutdown critical
+
+service spdaemon /vendor/bin/spdaemon
+    class core
+    user system
+    group system
 
 service thermal-engine /system/vendor/bin/thermal-engine -T
     class main
@@ -239,6 +392,20 @@ service adsprpcd /system/vendor/bin/adsprpcd
     group media
     writepid /dev/cpuset/system-background/tasks
 
+service hbtp /system/vendor/bin/hbtp_daemon
+    class main
+    user system
+    group system
+    disabled
+
+service audio_info /system/vendor/bin/audio_info
+   class main
+   user system
+   group system
+   disabled
+   oneshot
+   seclabel u:r:audio_info:s0
+
 service imsqmidaemon /system/vendor/bin/imsqmidaemon
     class main
     user system
@@ -253,9 +420,8 @@ service imsdatadaemon /system/vendor/bin/imsdatadaemon
     group system wifi radio inet log diag
     disabled
     writepid /dev/cpuset/system-background/tasks
-
 service pd_mapper /system/vendor/bin/pd-mapper
-    class core
+     class core
 
 on property:vendor.ims.QMI_DAEMON_STATUS=1
     start imsdatadaemon
@@ -278,12 +444,38 @@ on property:vendor.ims.DATA_DAEMON_STATUS=1
     start ims_rtp_daemon
     start vendor.imsrcsservice
 
+service ppd /vendor/bin/mm-pp-dpps
+    class late_start
+    user system
+    group system graphics
+    socket pps stream 0660 system system
+    disabled
+
+on property:init.svc.hwcomposer-2-1=stopped
+    stop ppd
+
+on property:init.svc.hwcomposer-2-1=running
+    start ppd
+
+on property:init.svc.hwcomposer-2-1=restarting
+    stop ppd
+
 service energy-awareness /system/vendor/bin/energy-awareness
     class main
     user root
     group system
     oneshot
     writepid /dev/cpuset/system-background/tasks
+
+service mdtpd /system/vendor/bin/mdtpd
+    class late_start
+    user root
+    group system radio drmrpc
+
+service mmbn-daemon /system/bin/mmbn-daemon
+    class main
+    disabled
+    oneshot
 
 service hvdcp_opti /system/vendor/bin/hvdcp_opti
     class main
@@ -298,8 +490,75 @@ service qvrd /system/bin/qvrservice
     socket qvrservice stream 0666 system system
     capabilities SYS_NICE
 
-service readmac /system/bin/readmac
+service hci_filter_root /system/vendor/bin/wcnss_filter
+    class late_start
+    user bluetooth
+    group bluetooth oem_2950 system
+    disabled
+
+service nv_mac /system/vendor/bin/nv_mac
     class main
     user root
-    group oem_2950
+    group root oem_2950
     oneshot
+
+service panel-info-sh /system/vendor/bin/init.panel_info.sh
+    class core
+    user root
+    oneshot
+
+service leds-sh /system/vendor/bin/init.leds.sh
+    class core
+    user root
+    oneshot
+
+service display_count /system/vendor/bin/display_count
+    class late_start
+    user root
+    group root
+
+on property:audio.speaker.id=*
+    start audio_info
+
+on property:persist.audio.spk_time=*
+    start audio_info
+
+on property:persist.audio.rcv_time=*
+    start audio_info
+
+on property:persist.audio.plug_times=*
+    start audio_info
+
+on property:slpi.restart=1
+    write /sys/kernel/debug/msm_subsys/slpi restart
+
+
+service smonsir /system/bin/smonsir
+    user root
+    group root
+    oneshot
+    disabled
+
+service smprosrv /system/bin/smprosrv
+    user root
+    group root
+    oneshot
+    disabled
+
+on property:init.svc.zygote=stopped
+    stop hal_displayfeature
+
+on property:init.svc.zygote=running
+    start hal_displayfeature
+
+on property:init.svc.zygote=restarting
+    stop hal_displayfeature
+
+on property:init.svc.zygote=stopped
+    stop light-hal-2-0
+
+on property:init.svc.zygote=running
+    start light-hal-2-0
+
+on property:init.svc.zygote=restarting
+    stop light-hal-2-0
