@@ -226,7 +226,7 @@ void interaction(int duration, int num_args, int opt_list[])
         if (perf_lock_acq) {
             lock_handle = perf_lock_acq(lock_handle, duration, opt_list, num_args);
             if (lock_handle == -1)
-#ifdef NO_LOG_ACQUIRE_LOCK
+#ifndef NO_LOG_ACQUIRE_LOCK
                 ALOGE("Failed to acquire lock.");
 #endif
         }
@@ -243,7 +243,7 @@ int interaction_with_handle(int lock_handle, int duration, int num_args, int opt
         if (perf_lock_acq) {
             lock_handle = perf_lock_acq(lock_handle, duration, opt_list, num_args);
             if (lock_handle == -1)
-#ifdef NO_LOG_ACQUIRE_LOCK
+#ifndef NO_LOG_ACQUIRE_LOCK
                 ALOGE("Failed to acquire lock.");
 #endif
         }
@@ -264,7 +264,7 @@ int perf_hint_enable(int hint_id , int duration)
         if (perf_hint) {
             lock_handle = perf_hint(hint_id, NULL, duration, -1);
             if (lock_handle == -1)
-#ifdef NO_LOG_ACQUIRE_LOCK
+#ifndef NO_LOG_ACQUIRE_LOCK
                 ALOGE("Failed to acquire lock.");
 #endif
         }
@@ -287,7 +287,7 @@ void perform_hint_action(int hint_id, int resource_values[], int num_resources)
                     num_resources);
 
             if (lock_handle == -1) {
-#ifdef NO_LOG_ACQUIRE_LOCK
+#ifndef NO_LOG_ACQUIRE_LOCK
                 ALOGE("Failed to acquire lock.");
 #endif
             } else {
