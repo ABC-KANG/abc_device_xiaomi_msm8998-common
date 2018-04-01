@@ -821,8 +821,6 @@ vendor/lib64/libspcom.so
 # Sensors
 vendor/bin/sensors.qcom
 etc/permissions/com.xiaomi.sensor.xml
-vendor/etc/sensors/hals.conf
-vendor/etc/sensors/sensor_def_qcomdev.conf
 framework/com.xiaomi.sensor.jar
 lib64/libcalapi.so
 lib64/libsensor_cal.so
@@ -856,7 +854,6 @@ lib/libsns_low_lat_stream_stub.so
 # Thermal
 vendor/bin/msm_irqbalance
 vendor/etc/thermal-engine.conf
-vendor/etc/thermal-engine-8998.conf
 vendor/etc/thermal-engine-8998-high.conf
 vendor/etc/thermal-engine-8998-map.conf
 vendor/bin/thermal-engine
