@@ -23,22 +23,11 @@
 $(call inherit-product, vendor/xiaomi/msm8998-common/msm8998-common-vendor.mk)
 # HIDL
 $(call inherit-product, device/xiaomi/msm8998-common/hidl.mk)
-
-$(call inherit-product, vendor/omni/config/phone-xxhdpi-4096-dalvik-heap.mk)
+# Setup Dalvik VM config.
+$(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-4096-dalvik-heap.mk)
 
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
-PRODUCT_PACKAGE_OVERLAYS += vendor/omni/overlay/CarrierConfig
-
-PRODUCT_PACKAGES += \
-    omni_charger_res_images
-
-# Live Wallpapers
-PRODUCT_PACKAGES += \
-    LiveWallpapers \
-    LiveWallpapersPicker \
-    VisualizationWallpapers \
-    librs_jni
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -224,10 +213,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     lights.msm8998
 
-# LiveDisplay jni
-PRODUCT_PACKAGES += \
-    libjni_livedisplay
-
 # Media
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/media/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
@@ -301,11 +286,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_BOOT_JARS += \
     qcrilhook \
     telephony-ext \
-    tcmiface \
     WfdCommon
-
-PRODUCT_PACKAGES += \
-    tcmiface
 
 # Seccomp policy
 PRODUCT_COPY_FILES += \
