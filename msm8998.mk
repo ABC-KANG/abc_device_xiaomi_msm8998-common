@@ -301,6 +301,7 @@ PRODUCT_PACKAGES += \
 # Tetheroffload
 PRODUCT_PACKAGES += \
     ipacm \
+    liboffloadhal \
     IPACM_cfg.xml
 
 # TextClassifier smart selection model files
@@ -330,6 +331,14 @@ PRODUCT_PACKAGES += \
     libwifi-hal-qcom \
     wpa_supplicant \
     wpa_supplicant.conf \
+
+PRODUCT_PACKAGES += \
+    wificond \
+    wifilogd \
+    libwpa_client \
+    wcnss_service \
+    libcld80211 \
+    lib_driver_cmd_qcwcn
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
