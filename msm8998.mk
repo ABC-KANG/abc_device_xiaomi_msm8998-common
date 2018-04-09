@@ -125,7 +125,7 @@ PRODUCT_COPY_FILES += \
 
 # Camera
 PRODUCT_PACKAGES += \
-    SnapdragonCamera2 \
+    Snap \
     libshim_MiCamera
 
 # Charger
