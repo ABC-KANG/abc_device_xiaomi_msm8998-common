@@ -161,9 +161,6 @@ BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 WITH_LINEAGE_CHARGER := false
 
-# CNE and DPM
-BOARD_USES_QCNE := true
-
 # Enable dexpreopt to speed boot time
 WITH_DEXPREOPT := true
 DONT_DEXPREOPT_PREBUILTS := true
