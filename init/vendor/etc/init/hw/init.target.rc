@@ -240,9 +240,9 @@ service per_proxy /vendor/bin/pm-proxy
 service readmac /vendor/bin/readmac
     class main
     user root
-    group root
+    group oem_2950 bluetooth
     oneshot
-
+     
 on property:init.svc.per_mgr=running
     start per_proxy
 
