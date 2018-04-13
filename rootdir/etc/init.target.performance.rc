@@ -43,21 +43,24 @@ on charger
     write /sys/class/input/input2/enabled 0
     write /sys/class/input/input3/enabled 0
     write /sys/class/input/input4/enabled 0
-    write /sys/module/lpm_levels/parameters/sleep_disabled 0
-    write /sys/module/lpm_levels/system/system-pc/idle_enabled 0
+
     write /sys/devices/system/cpu/cpu0/online 1
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "userspace"
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 300000
     write /sys/devices/system/cpu/cpu1/online 1
-    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "userspace"
-    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq 300000
     write /sys/devices/system/cpu/cpu2/online 0
     write /sys/devices/system/cpu/cpu3/online 0
     write /sys/devices/system/cpu/cpu4/online 0
     write /sys/devices/system/cpu/cpu5/online 0
     write /sys/devices/system/cpu/cpu6/online 0
     write /sys/devices/system/cpu/cpu7/online 0
-    write /sys/module/msm_thermal/parameters/enabled "N"
+
+    write /sys/module/msm_thermal/parameters/enabled N
+    write /sys/module/lpm_levels/parameters/sleep_disabled
+
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "userspace"
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 300000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "userspace"
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq 300000
+
     mount ext4 /dev/block/bootdevice/by-name/persist /persist nosuid nodev barrier=1
     start hvdcp_opti
     setprop sys.usb.configfs 1
@@ -198,7 +201,6 @@ on property:sys.boot_completed=1
     write /dev/cpuset/camera-daemon/cpus 0-3
 
     # Set up big.LITTLE scheduler configuration
-    write /proc/sys/kernel/sched_migration_fixup 1
     write /proc/sys/kernel/sched_upmigrate 95
     write /proc/sys/kernel/sched_downmigrate 90
     write /proc/sys/kernel/sched_group_upmigrate 100

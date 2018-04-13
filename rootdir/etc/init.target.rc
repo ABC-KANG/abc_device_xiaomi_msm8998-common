@@ -34,15 +34,14 @@ on init
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
 
 on fs
-    wait /dev/block/platform/soc/1da4000.ufshc
-    symlink /dev/block/platform/soc/1da4000.ufshc /dev/block/bootdevice
+    wait /dev/block/platform/soc/${ro.boot.bootdevice}
+    symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     mount_all /vendor/etc/fstab.qcom --early
 
     restorecon_recursive /persist
     mkdir /persist/data 0700 system system
     mkdir /persist/wlan_bt 0700 system system
     mkdir /persist/audio 0755 system system
-    mkdir /persist/subsys 0700 system system
 
     # Start HW service manager early
     start hwservicemanager
@@ -71,12 +70,10 @@ on post-fs
     wait_for_prop sys.listeners.registered true
 
 on post-fs-data
-    mkdir /data/tombstones 0771 system system
     mkdir /tombstones/modem 0771 system system
     mkdir /tombstones/lpass 0771 system system
     mkdir /tombstones/wcnss 0771 system system
     mkdir /tombstones/dsps 0771 system system
-    mkdir /data/misc/qvr 0770 system system
     mkdir /data/thermal 0771 system system
     mkdir /data/thermal/config 0771 system system
 
@@ -175,13 +172,6 @@ service hvdcp_opti /system/vendor/bin/hvdcp_opti
     user root
     group system wakelock
     writepid /dev/cpuset/system-background/tasks
-
-service qvrd /system/bin/qvrservice
-    class late_start
-    user system
-    group system camera graphics
-    socket qvrservice stream 0666 system system
-    capabilities SYS_NICE
 
 service readmac /system/vendor/bin/readmac
     class main
