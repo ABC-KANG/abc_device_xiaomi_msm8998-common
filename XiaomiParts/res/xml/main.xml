@@ -24,10 +24,6 @@
     <PreferenceCategory
         android:key="display"
         android:title="@string/display_title">
-        <SwitchPreference
-            android:key="taptowake"
-            android:summary="@string/taptowake_summary"
-            android:title="@string/taptowake_title" />
         <Preference
             android:key="device_doze"
             android:persistent="false"

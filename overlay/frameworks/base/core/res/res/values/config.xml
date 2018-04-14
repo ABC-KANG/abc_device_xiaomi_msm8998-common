@@ -394,4 +394,6 @@
          that can be set by the user. -->
     <integer name="config_screenBrightnessDim">6</integer>
 
+    <bool name="config_supportDoubleTapWake">true</bool>
+
 </resources>
