@@ -191,3 +191,7 @@ ro.wlan.chip=39xx
 ro.wlan.mimo=1
 ro.wlan.vendor=qcom
 wifi.interface=wlan0
+
+# Vibrator HAL
+ro.vibrator.hal.click.duration=10
+ro.vibrator.hal.tick.duration=4
