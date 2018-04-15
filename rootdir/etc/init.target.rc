@@ -37,7 +37,6 @@ on fs
     wait /dev/block/platform/soc/1da4000.ufshc
     symlink /dev/block/platform/soc/1da4000.ufshc /dev/block/bootdevice
     mount_all /vendor/etc/fstab.qcom --early
-    swapon_all /vendor/etc/fstab.qcom
 
     restorecon_recursive /persist
     mkdir /persist/data 0700 system system
@@ -84,6 +83,9 @@ on post-fs-data
 
 on boot
     start rmt_storage
+
+on property:sys.post_boot.parsed=1
+    swapon_all /vendor/etc/fstab.qcom
 
 service per_mgr /vendor/bin/pm-service
     class core

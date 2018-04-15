@@ -204,3 +204,5 @@ on property:sys.boot_completed=1
     write /proc/sys/kernel/sched_freq_dec_notify 400000
     write /proc/sys/kernel/sched_spill_nr_run 5
     write /proc/sys/kernel/sched_restrict_cluster_spill 1
+
+    setprop sys.post_boot.parsed 1
