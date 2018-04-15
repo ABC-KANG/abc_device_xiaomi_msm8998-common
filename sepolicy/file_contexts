@@ -17,6 +17,9 @@
 # IR
 /dev/peel_ir					u:object_r:ir_device:s0
 
+# Light HAL
+/(vendor|system/vendor)/bin/hw/android\.hardware\.light@2\.0-service\.xiaomi_msm8998	u:object_r:hal_light_default_exec:s0
+
 # Perfd
 /(vendor|system/vendor)/bin/perfd                                             u:object_r:perfd_exec:s0
 /(vendor|system/vendor)/bin/hw/android\.hardware\.power@1\.1-service.msm8998     u:object_r:hal_power_default_exec:s0
