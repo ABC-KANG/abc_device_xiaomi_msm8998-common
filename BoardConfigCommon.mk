@@ -43,16 +43,17 @@ TARGET_USES_64_BIT_BINDER := true
 TARGET_USE_QCOM_BIONIC_OPTIMIZATION := true
 TARGET_COMPILE_WITH_MSM_KERNEL := true
 
-ENABLE_CPUSETS := true
-
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := msm8998
 TARGET_NO_BOOTLOADER := true
 
 # Kernel
 BOARD_KERNEL_BASE := 0x00000000
-BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200,n8 androidboot.console=ttyMSM0 earlycon=msm_serial_dm,0xc1b0000 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x237 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 sched_enable_hmp=1 sched_enable_power_aware=1 service_locator.enable=1 swiotlb=2048 androidboot.configfs=true androidboot.usbcontroller=a800000.dwc3
-BOARD_KERNEL_CMDLINE +=androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom user_debug=31 ehci-hcd.park=3
+BOARD_KERNEL_CMDLINE += lpm_levels.sleep_disabled=1 service_locator.enable=1
+BOARD_KERNEL_CMDLINE += swiotlb=2048 androidboot.configfs=true
+BOARD_KERNEL_CMDLINE += androidboot.usbcontroller=a800000.dwc3
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
@@ -61,7 +62,6 @@ TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
 TARGET_KERNEL_CLANG_COMPILE := true
 TARGET_KERNEL_SOURCE := kernel/xiaomi/msm8998
-TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 
 # Platform
 TARGET_BOARD_PLATFORM := msm8998
@@ -224,8 +224,6 @@ BOARD_FLASH_BLOCK_SIZE := 262144 # (BOARD_KERNEL_PAGESIZE * 64)
 
 # Power
 TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/double_tap_enable"
-TARGET_PROVIDES_POWERHAL := true
-TARGET_USES_INTERACTION_BOOST := true
 
 # QCOM
 BOARD_USES_QCOM_HARDWARE := true
@@ -238,7 +236,6 @@ BOARD_USES_VENDOR_QCOM := false
 TARGET_RECOVERY_FSTAB := $(PLATFORM_PATH)/recovery/recovery.fstab
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 TARGET_USERIMAGES_USE_EXT4 := true
-#TARGET_USERIMAGES_USE_F2FS := true
 
 # Releasetools
 TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_msm8998
