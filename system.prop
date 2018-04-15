@@ -199,3 +199,7 @@ ro.opa.eligible_device=true
 
 # force aspect ratio
 persist.sys.force_max_aspect_ratio.enabled=1
+
+# Vibrator HAL
+ro.vibrator.hal.click.duration=10
+ro.vibrator.hal.tick.duration=4
