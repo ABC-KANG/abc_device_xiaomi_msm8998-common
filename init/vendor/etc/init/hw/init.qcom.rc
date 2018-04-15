@@ -600,6 +600,7 @@ service ftmd /system/vendor/bin/ftmdaemon
 
 on property:sys.post_boot.parsed=1
     start perfd
+    swapon_all fstab.qcom
 
 service perfd /vendor/bin/perfd
    class main
