@@ -148,8 +148,8 @@ ro.nfc.port=I2C
 ro.se.type=eSE,HCE,UICC
 
 # Perf
-persist.sys.perf.debug=true
 ro.vendor.extension_library=libqti-perfd-client.so
+ro.vendor.power.touchboost_enabled=false
 ro.vendor.qti.sys.fw.bg_apps_limit=60
 
 # Sensors
