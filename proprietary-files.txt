@@ -114,7 +114,7 @@ vendor/lib64/libdualcameraddm.so
 vendor/lib64/liboptizoom.so
 vendor/lib64/libseemore.so
 vendor/lib64/libubifocus.so
-vendor/lib/hw/camera.msm8998.so
+vendor/lib/hw/camera.msm8998.so|a82139eecab8cc585473e3e3f7cd347aeb68650a
 vendor/lib/libarcsoft_beautyshot_image_algorithm.so
 vendor/lib/libarcsoft_beauty_shot.so
 vendor/lib/libarcsoft_beautyshot.so
@@ -274,7 +274,6 @@ vendor/bin/hvdcp_opti
 # CNE
 vendor/bin/cnd
 etc/cne/SwimConfig.xml
-etc/cne/andsfCne.xml
 vendor/etc/cne/wqeclient/ATT/ATT_profile1.xml
 vendor/etc/cne/wqeclient/ATT/ATT_profile2.xml
 vendor/etc/cne/wqeclient/ATT/ATT_profile3.xml
@@ -299,9 +298,7 @@ etc/permissions/com.quicinc.cne.xml
 framework/cneapiclient.jar
 framework/com.quicinc.cne.api-V1.0-java.jar
 framework/com.quicinc.cne.jar
--priv-app/CNEService/CNEService.apk|a39e082f145c5a68b3200711520c16cc868e3af2
-lib/libvendorconn.so
-lib64/libvendorconn.so
+-priv-app/CNEService/CNEService.apk
 lib/vendor.qti.hardware.data.latency@1.0.so
 lib64/vendor.qti.hardware.data.latency@1.0.so
 vendor/lib/com.quicinc.cne.api@1.0.so
@@ -331,14 +328,14 @@ vendor/lib64/vendor.qti.hardware.data.latency@1.0_vendor.so
 bin/dpmd
 etc/dpm/dpm.conf
 etc/dpm/nsrm/NsrmConfiguration.xml
-etc/init/dpmd.rc|6ac3acd2e0ecb426d57c0e5e72adcb9c3cbc0dcc
+etc/init/dpmd.rc
 etc/permissions/com.qti.dpmframework.xml
 etc/permissions/dpmapi.xml
 framework/com.qti.dpmframework.jar
 framework/dpm.jar
 framework/dpmapi.jar
 framework/tcmclient.jar
--priv-app/dpmserviceapp/dpmserviceapp.apk|b36b22114d69f8adeba533a343c7f39a084d9b3e
+-priv-app/dpmserviceapp/dpmserviceapp.apk
 lib/com.qualcomm.qti.dpm.api@1.0.so
 lib/libdiag_system.so
 lib/libdpmctmgr.so
@@ -354,18 +351,14 @@ lib64/libdpmframework.so
 lib64/libdpmnsrm.so
 lib64/libdpmtcm.so
 vendor/bin/dpmQmiMgr
-vendor/lib/com.qualcomm.qti.dpm.api@1.0_vendor.so
-vendor/lib/libdpmqmihal.so
 vendor/lib64/com.qualcomm.qti.dpm.api@1.0_vendor.so
 vendor/lib64/libdpmqmihal.so
 
 # DRM and SEE
 lib/libGPTEE_system.so
 lib/libQTEEConnector_system.so
-lib/vendor.qti.hardware.qteeconnector@1.0.so
 lib64/libGPTEE_system.so
 lib64/libQTEEConnector_system.so
-lib64/vendor.qti.hardware.qteeconnector@1.0.so
 vendor/bin/qseecomd
 vendor/bin/hw/vendor.qti.hardware.qteeconnector@1.0-service
 vendor/etc/init/vendor.qti.hardware.qteeconnector@1.0-service.rc
@@ -387,7 +380,6 @@ vendor/lib/libGPTEE_vendor.so
 vendor/lib/libQTEEConnector_vendor.so
 vendor/lib/mediadrm/libwvdrmengine.so
 vendor/lib/vendor.qti.hardware.qteeconnector@1.0_vendor.so
-vendor/lib/hw/vendor.qti.hardware.qteeconnector@1.0-impl.so
 vendor/lib64/libdrmfs.so
 vendor/lib64/libdrmtime.so
 vendor/lib64/libGPreqcancel_svc.so
@@ -724,7 +716,6 @@ vendor/lib64/libqti-iopd.so
 vendor/bin/pm-proxy
 vendor/bin/pm-service
 vendor/lib64/libperipheral_client.so
-vendor/lib/libperipheral_client.so
 
 # PLAYready
 vendor/lib/qcdrm/playready/lib/drm/libdrmprplugin_customer.so
@@ -762,7 +753,6 @@ vendor/bin/irsc_util
 etc/permissions/qti_libpermissions.xml
 etc/permissions/qti_permissions.xml
 lib64/libqminvapi.so
-lib/libqminvapi.so
 vendor/bin/pd-mapper
 vendor/lib64/libdiag.so
 vendor/lib64/libdsi_netctrl.so
@@ -897,10 +887,6 @@ vendor/lib64/libthermalioctl.so
 vendor/bin/time_daemon
 -vendor/lib64/libtime_genoff.so
 -vendor/lib/libtime_genoff.so
-
-# Voice fingerprint
-vendor/lib/vendor.qti.voiceprint@1.0.so
-vendor/lib64/vendor.qti.voiceprint@1.0.so
 
 # WiFi
 vendor/bin/cnss_diag
