@@ -165,12 +165,14 @@ PRODUCT_PACKAGES += \
 # GPS
 PRODUCT_PACKAGES += \
     gps.conf \
-    libgnss \
-    libgps.utils \
     liblocation_api \
+    libgps.utils \
     libloc_core \
+    libloc_stub \
     libloc_pla \
-    libvehiclenetwork-native
+    libcurl \
+    libgnsspps \
+    libgnss
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/gps/flp.conf:system/vendor/etc/flp.conf \
