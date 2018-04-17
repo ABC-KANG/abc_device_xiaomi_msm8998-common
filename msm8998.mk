@@ -126,7 +126,6 @@ PRODUCT_COPY_FILES += \
 # Camera
 PRODUCT_PACKAGES += \
     Snap \
-    libshim_MiCamera
 
 # Charger
 PRODUCT_PACKAGES += \

@@ -99,7 +99,8 @@ lib/libjni_stillmore.so
 lib/libjni_trueportrait.so
 lib/libjni_truescanner_v2.so
 lib/libjni_ubifocus.so
-lib/libMiCameraHal.so|b8a1a5806b35dfbe0f7c2e990d0e76e49f447b7f
+lib/libMiCameraHal.so|799fe89fabb1ebdbc18b35ed2c72effe95ca7c91
+lib/libmisk.so|7679f1434e1186b62d831b74b11577a1cca8db94
 lib/libmorpho_group_portrait.so
 lib/libmorpho_groupshot.so
 lib/libmorpho_memory_allocator.so
@@ -113,7 +114,7 @@ vendor/lib64/libdualcameraddm.so
 vendor/lib64/liboptizoom.so
 vendor/lib64/libseemore.so
 vendor/lib64/libubifocus.so
-vendor/lib/hw/camera.msm8998.so
+vendor/lib/hw/camera.msm8998.so|a82139eecab8cc585473e3e3f7cd347aeb68650a
 vendor/lib/libarcsoft_beautyshot_image_algorithm.so
 vendor/lib/libarcsoft_beauty_shot.so
 vendor/lib/libarcsoft_beautyshot.so
