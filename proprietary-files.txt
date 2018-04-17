@@ -203,6 +203,9 @@ vendor/lib/libStereoRectification.so
 vendor/lib/libubifocus.so
 vendor/lib/libXMFD_AgeGender.so
 
+# Camera eeprom
+vendor/lib/libSonyIMX386PdafLibrary.so
+
 # Camera firmware
 etc/firmware/cpp_firmware_v1_1_1.fw
 etc/firmware/cpp_firmware_v1_1_6.fw
