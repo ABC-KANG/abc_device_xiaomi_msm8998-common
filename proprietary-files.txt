@@ -431,6 +431,10 @@ vendor/lib64/hw/gatekeeper.msm8998.so
 vendor/lib/hw/gatekeeper.msm8998.so
 
 # GPS
+etc/permissions/com.qti.location.sdk.xml
+etc/permissions/com.qualcomm.location.xml
+etc/permissions/izat.xt.srv.xml
+etc/permissions/privapp-permissions-com.qualcomm.location.xml
 framework/com.qti.location.sdk.jar
 framework/izat.xt.srv.jar
 lib64/liblocationservice_jni.so
@@ -439,7 +443,7 @@ lib64/vendor.qti.gnss@1.0.so
 lib/liblocationservice_jni.so
 lib/libxt_native.so
 lib/vendor.qti.gnss@1.0.so
--priv-app/com.qualcomm.location/com.qualcomm.location.apk|f0ab8445fbc726a900e861a7d52c5b36d968bade
+-priv-app/com.qualcomm.location/com.qualcomm.location.apk
 vendor/bin/hw/vendor.qti.gnss@1.0-service
 vendor/bin/loc_launcher
 vendor/bin/lowi-server
@@ -966,4 +970,3 @@ vendor/lib/libwfdhdcpcp.so|149a400064b53fb607f34235b3910815e5039279
 vendor/lib/libwfdmmservice.so|8eb0a5e3d5795e3caa4a20dc0b695e9f7711ecab
 vendor/lib/libwfdmodulehdcpsession.so|a675134223409580691d5df564470af655d1c9c4
 vendor/lib/vendor.display.config@1.0_vendor.so|13824ff08cb76edb7f38a6b66bd5d56935b13885
-
