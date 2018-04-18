@@ -413,12 +413,6 @@ service hci_filter_root /system/vendor/bin/wcnss_filter
     group bluetooth oem_2950 system
     disabled
 
-service nv_mac /system/vendor/bin/nv_mac
-    class main
-    user root
-    group root oem_2950
-    oneshot
-
 service panel-info-sh /system/vendor/bin/init.panel_info.sh
     class core
     user root

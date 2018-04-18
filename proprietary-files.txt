@@ -889,7 +889,6 @@ vendor/bin/time_daemon
 # WiFi
 vendor/bin/cnss_diag
 vendor/bin/cnss-daemon
-vendor/bin/nv_mac
 
 # WiFi Display - from cheeseburger - OPM1.171019.011
 -app/WfdService/WfdService.apk|30939251429b44167c0cd9a34ebb06fd8d88d608
