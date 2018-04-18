@@ -241,6 +241,7 @@ service readmac /vendor/bin/readmac
     class main
     user root
     group oem_2950 bluetooth
+    capabilities CHOWN FOWNER
     oneshot
      
 on property:init.svc.per_mgr=running
