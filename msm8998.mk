@@ -86,10 +86,7 @@ PRODUCT_PACKAGES += \
     libqcomvisualizer \
     libqcomvoiceprocessing \
     libvolumelistener \
-    tinymix \
-    libqahw \
-    libOmxG711Enc \
-    libhwacceffectswrapper
+    tinymix
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio/audio_output_policy.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_output_policy.conf \
@@ -114,8 +111,7 @@ PRODUCT_COPY_FILES += \
 
 # Bluetooth HAL
 PRODUCT_PACKAGES += \
-    libbt-vendor \
-    libbthost_if
+    libbt-vendor
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/bluetooth/bt_did.conf:system/etc/bluetooth/bt_did.conf \
@@ -137,20 +133,15 @@ PRODUCT_PACKAGES += \
     com.quicinc.cne \
     services-ext
 
-# Display
+# Display Display
 PRODUCT_PACKAGES += \
     copybit.msm8998 \
     gralloc.msm8998 \
     hwcomposer.msm8998 \
-    libhwc2on1adapter \
-    libdisplayconfig \
-    libsdmcore \
-    libqservice \
-    libgpu_tonemapper \
-    libqdMetaData.system \
     memtrack.msm8998 \
-    libgenlock \
+    libdisplayconfig \
     liboverlay \
+    libqdMetaData.system \
     libtinyxml
 
 # Device Settings
@@ -183,9 +174,6 @@ PRODUCT_COPY_FILES += \
 
 # IMS
 PRODUCT_PACKAGES += \
-    com.android.ims.rcsmanager \
-    RcsService \
-    PresencePolling \
     ims-ext-common
 
 # HIDL
@@ -232,13 +220,6 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_video.xml
 
-# Media Extensions
-PRODUCT_PACKAGES += \
-    libavmediaserviceextensions \
-    libmediametrics \
-    libregistermsext \
-    mediametrics
-
 # Netutils
 PRODUCT_PACKAGES += \
     libandroid_net \
@@ -264,7 +245,6 @@ PRODUCT_COPY_FILES += \
 # OMX
 PRODUCT_PACKAGES += \
     libc2dcolorconvert \
-    libhypv_intercept \
     libOmxAacEnc \
     libOmxAmrEnc \
     libOmxCore \
@@ -289,7 +269,6 @@ PRODUCT_PACKAGES += \
 
 # RIL
 PRODUCT_PACKAGES += \
-    ims-ext-common \
     librmnetctl \
     libxml2 \
     libprotobuf-cpp-full \
@@ -309,12 +288,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     vr.msm8998 \
     thermal.msm8998
-
-# Tetheroffload
-PRODUCT_PACKAGES += \
-    ipacm \
-    liboffloadhal \
-    IPACM_cfg.xml
 
 # TextClassifier smart selection model files
 PRODUCT_PACKAGES += \
@@ -336,22 +309,16 @@ PRODUCT_PACKAGES += \
 
 # Wifi
 PRODUCT_PACKAGES += \
-    hostapd \
-    readmac \
-    hostapd_cli \
+    ipacm \
+    IPACM_cfg.xml \
     libqsap_sdk \
     libQWiFiSoftApCfg \
-    libwifi-hal-qcom \
-    wpa_supplicant \
-    wpa_supplicant.conf \
-
-PRODUCT_PACKAGES += \
-    wificond \
-    wifilogd \
     libwpa_client \
-    wcnss_service \
-    libcld80211 \
-    lib_driver_cmd_qcwcn
+    hostapd \
+    readmac \
+    dhcpcd.conf \
+    wpa_supplicant \
+    wpa_supplicant.conf
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
