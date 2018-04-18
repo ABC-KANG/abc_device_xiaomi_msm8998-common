@@ -388,16 +388,6 @@ service hci_filter_root /system/vendor/bin/wcnss_filter
     group bluetooth oem_2950 system
     disabled
 
-service panel-info-sh /system/vendor/bin/init.panel_info.sh
-    class core
-    user root
-    oneshot
-
-service leds-sh /system/vendor/bin/init.leds.sh
-    class core
-    user root
-    oneshot
-
 service display_count /system/vendor/bin/display_count
     class late_start
     user root
