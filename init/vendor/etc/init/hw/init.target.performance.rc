@@ -79,6 +79,10 @@ on charger
     write /sys/devices/system/cpu/cpu6/online 0
     write /sys/devices/system/cpu/cpu7/online 0
 
+    # Xiaomi stuff
+    start hvdcp_opti
+    setprop sys.usb.configfs 1
+
 on late-fs
     # Enable boot time fs tuning (ro like system is on sda, rw like userdata is on sde)
     write /sys/block/sda/queue/iostats 0
