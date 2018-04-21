@@ -165,9 +165,10 @@ PRODUCT_PACKAGES += \
     android.hardware.memtrack@1.0-service \
     android.hardware.renderscript@1.0-impl
 
-# Doze
+# Xiaomi
 PRODUCT_PACKAGES += \
-    XiaomiDoze
+    XiaomiDoze \
+    XiaomiParts
 
 # DRM
 PRODUCT_PACKAGES += \
