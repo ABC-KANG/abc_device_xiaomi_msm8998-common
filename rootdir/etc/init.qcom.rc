@@ -27,6 +27,7 @@
 
 import /vendor/etc/init/hw/init.qcom.usb.rc
 import /vendor/etc/init/hw/init.target.rc
+import /vendor/etc/init/hw/init.target.performance.rc
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
@@ -452,12 +453,6 @@ service loc_launcher /system/vendor/bin/loc_launcher
 service qcom-sh /vendor/bin/init.qcom.sh
     class late_start
     user root
-    oneshot
-
-service qcom-post-boot /vendor/bin/init.qcom.post_boot.sh
-    class late_start
-    user root
-    disabled
     oneshot
 
 service panel-info /system/vendor/bin/init.panel_info.sh
