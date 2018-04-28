@@ -193,3 +193,7 @@ wifi.interface=wlan0
 # Vibrator HAL
 ro.vibrator.hal.click.duration=10
 ro.vibrator.hal.tick.duration=4
+
+# Fling velocities
+ro.min.fling_velocity=140
+ro.max.fling_velocity=20000
