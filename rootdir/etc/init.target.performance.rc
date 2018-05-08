@@ -121,7 +121,6 @@ on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "70 672000:45 825600:50 1036800:60 1248000:70 1478400:85"
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 40000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 100000
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 300000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif 1
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/enable_prediction 1
 
@@ -138,7 +137,6 @@ on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads "87 1400000:31 1600000:45 1800000:66 1900000:93"
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 40000
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 39000
-    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 300000
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif 1
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/enable_prediction 1
 
@@ -149,6 +147,10 @@ on property:sys.boot_completed=1
 
     # Enable thermal and BCL hotplug
     write /sys/module/msm_thermal/core_control/enabled 1
+
+    # Ensure minimum frequencies set to 230MHz
+    write /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq 230000
+    write /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq 230000
 
     # Enable bus-dcvs
     write /sys/class/devfreq/soc:qcom,cpubw/governor "bw_hwmon"
