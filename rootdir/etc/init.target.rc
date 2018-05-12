@@ -52,6 +52,11 @@ on fs
     # Start HW service manager early
     start hwservicemanager
 
+on post-fs
+    wait_for_prop sys.listeners.registered true
+
+    write /dev/ipa 1
+
 on late-fs
     # Start devices by sysfs trigger
     write /sys/kernel/boot_adsp/boot 1
@@ -66,21 +71,15 @@ on late-fs
 
     mount_all /vendor/etc/fstab.qcom --late
 
-on post-fs
-    wait_for_prop sys.listeners.registered true
-
-    write /dev/ipa 1
-
 on post-fs-data
     mkdir /tombstones/modem 0771 system system
     mkdir /tombstones/lpass 0771 system system
     mkdir /tombstones/wcnss 0771 system system
     mkdir /tombstones/dsps 0771 system system
+
+    # Create directory for thermal engine
     mkdir /data/thermal 0771 system system
     mkdir /data/thermal/config 0771 system system
-
-on boot
-    start rmt_storage
 
 on property:sys.post_boot.parsed=1
     swapon_all /vendor/etc/fstab.qcom
