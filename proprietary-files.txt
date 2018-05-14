@@ -60,8 +60,6 @@ vendor/lib64/libldacBT_enc.so|a5fb63c23a748ed3e1ddf39c6da353f3d2da88f1
 
 # Bluetooth
 vendor/bin/wcnss_filter
-vendor/lib/hw/android.hardware.bluetooth@1.0-impl-qti.so
-vendor/lib/libbtnv.so
 vendor/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so
 vendor/lib64/libbtnv.so
 
