@@ -1,1 +1,3 @@
 allow init adsprpcd_file:filesystem { mount relabelfrom relabelto };
+
+allow init ipa_dev:chr_file { open };
