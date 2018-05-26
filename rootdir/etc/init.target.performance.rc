@@ -77,20 +77,22 @@ on charger
 on late-fs
     # boot time fs tune
     write /sys/block/sda/queue/iostats 0
-    write /sys/block/sda/queue/scheduler cfq
+    write /sys/block/sde/queue/iostats 0
     write /sys/block/sda/queue/iosched/slice_idle 0
+    write /sys/block/sde/queue/iosched/slice_idle 0
+    write /sys/block/sda/queue/nr_requests 256
+    write /sys/block/sde/queue/nr_requests 256
     write /sys/block/sda/queue/read_ahead_kb 2048
     write /sys/block/sde/queue/read_ahead_kb 2048
-    write /sys/block/sda/queue/nr_requests 256
 
 on property:sys.boot_completed=1
     # end boot time fs tune
     write /sys/block/sda/queue/read_ahead_kb 1024
     write /sys/block/sde/queue/read_ahead_kb 1024
     write /sys/block/sda/queue/nr_requests 128
+    write /sys/block/sde/queue/nr_requests 128
     write /sys/block/sda/queue/iostats 1
-    write /sys/block/sda/queue/scheduler deadline
-    write /sys/block/sde/queue/scheduler deadline
+    write /sys/block/sde/queue/iostats 1
 
     # Enable UFS powersaving
     write /sys/devices/soc/1da4000.ufshc/clkscale_enable 1
@@ -151,16 +153,11 @@ on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/enable_prediction 1
 
     # Input boost configuration
-    write /sys/kernel/cpu_input_boost/ib_freqs "1036800 1056000"
-    write /sys/kernel/cpu_input_boost/ib_duration_ms 1000
-    write /sys/kernel/cpu_input_boost/enabled 1
+    write /sys/module/cpu_boost/parameters/input_boost_freq "0:1036800"
+    write /sys/module/cpu_boost/parameters/input_boost_ms 150
 
     # Enable thermal and BCL hotplug
     write /sys/module/msm_thermal/core_control/enabled 1
-
-    # Ensure minimum frequencies set to 230MHz
-    write /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq 230000
-    write /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq 230000
 
     # Enable bus-dcvs
     write /sys/class/devfreq/soc:qcom,cpubw/governor "bw_hwmon"
