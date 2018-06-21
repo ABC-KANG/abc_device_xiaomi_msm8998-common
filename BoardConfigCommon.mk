@@ -173,9 +173,6 @@ BOARD_FLASH_BLOCK_SIZE := 262144 # (BOARD_KERNEL_PAGESIZE * 64)
 # Power
 TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/double_tap_enable"
 
-# Properties
-TARGET_SYSTEM_PROP += $(PLATFORM_PATH)/system.prop
-
 # QCOM
 BOARD_USES_QCOM_HARDWARE := true
 TARGET_USE_SDCLANG := true
