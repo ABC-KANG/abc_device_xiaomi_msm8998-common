@@ -53,7 +53,6 @@ vendor/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so
 vendor/lib64/libbtnv.so
 
 # Camera
-bin/mm-qcamera-daemon
 lib/libMiCameraHal.so|799fe89fabb1ebdbc18b35ed2c72effe95ca7c91
 lib/libmisk.so|7679f1434e1186b62d831b74b11577a1cca8db94
 lib/libtrueportrait.so
