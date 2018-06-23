@@ -83,4 +83,9 @@ patchelf --set-soname libmisk.so "$MI_SKIA"
 patchelf --replace-needed libskia.so libmisk.so "$MI_CAMERA_HAL"
 patchelf --replace-needed libskia.so libmisk.so "$CAMERA_MSM8998"
 
+#
+# Load camera watermark from vendor
+#
+sed -i "s|system/etc/dualcamera.png|vendor/etc/dualcamera.png|g" "$MI_CAMERA_HAL"
+
 "$MY_DIR"/setup-makefiles.sh
