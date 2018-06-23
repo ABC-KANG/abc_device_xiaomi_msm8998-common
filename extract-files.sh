@@ -88,4 +88,11 @@ patchelf --replace-needed libskia.so libmisk.so "$CAMERA_MSM8998"
 #
 sed -i "s|system/etc/dualcamera.png|vendor/etc/dualcamera.png|g" "$MI_CAMERA_HAL"
 
+if [ "$DEVICE" == "chiron" ]
+then
+    # Load elliptic configs from vendor
+    ELLIPTIC_HAL="$LINEAGE_ROOT"/vendor/"$VENDOR"/"$DEVICE"/proprietary/vendor/lib64/sensors.elliptic.so
+    sed -i "s|/etc/elliptic_sensor.xml|/vendor/etc/elliptic.xml|g" "$ELLIPTIC_HAL"
+fi
+
 "$MY_DIR"/setup-makefiles.sh
