@@ -328,7 +328,8 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     init.panel_info.sh \
-    init.qcom.sh
+    init.qcom.sh \
+    init.qcom.power.sh
 
 # RCS
 PRODUCT_PACKAGES += \
