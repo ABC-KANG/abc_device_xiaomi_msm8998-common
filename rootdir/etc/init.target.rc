@@ -168,13 +168,6 @@ on property:vendor.ims.DATA_DAEMON_STATUS=1
     start ims_rtp_daemon
     start vendor.imsrcsservice
 
-service energy-awareness /vendor/bin/energy-awareness
-    class main
-    user root
-    group system
-    oneshot
-    writepid /dev/cpuset/system-background/tasks
-
 service hvdcp_opti /vendor/bin/hvdcp_opti
     class main
     user root
@@ -184,5 +177,5 @@ service hvdcp_opti /vendor/bin/hvdcp_opti
 service readmac /vendor/bin/readmac
     class main
     user root
-    group oem_2950 bluetooth
+    group oem_2901 bluetooth
     oneshot
