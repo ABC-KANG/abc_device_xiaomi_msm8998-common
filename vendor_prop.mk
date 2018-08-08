@@ -172,6 +172,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.build.security_patch=2018-06-01
 
+# VNDK
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vndk.version=27
+
 # WFD
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.debug.wfd.enable=1 \

@@ -353,6 +353,14 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     vndk_package
 
+# Support for the O-MR1 devices
+PRODUCT_COPY_FILES += \
+    build/make/target/product/vndk/init.gsi.rc:system/etc/init/init.gsi.rc \
+    build/make/target/product/vndk/init.vndk-27.rc:system/etc/init/gsi/init.vndk-27.rc
+
+# Support addtional O-MR1 vendor interface
+PRODUCT_EXTRA_VNDK_VERSIONS := 27
+
 # TextClassifier smart selection model files
 PRODUCT_PACKAGES += \
     textclassifier.smartselection.bundle1
