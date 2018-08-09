@@ -56,6 +56,9 @@ on fs
 on post-fs
     wait_for_prop sys.listeners.registered true
 
+    rm /cache/logcat.txt
+    start logcat_debug
+
     write /dev/ipa 1
 
 on late-fs
@@ -88,6 +91,12 @@ on post-fs-data
     # Create directory for thermal engine
     mkdir /data/thermal 0771 system system
     mkdir /data/thermal/config 0771 system system
+
+service logcat_debug /system/bin/logcat -b all -f /cache/logcat.txt -v threadtime
+    class main
+    user root
+    group system
+    disabled
 
 service per_mgr /vendor/bin/pm-service
     class core
