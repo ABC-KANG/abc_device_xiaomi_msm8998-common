@@ -24,7 +24,7 @@ if [[ ! -d "$MY_DIR" ]]; then MY_DIR="$PWD"; fi
 
 LINEAGE_ROOT="$MY_DIR"/../../..
 
-HELPER="$LINEAGE_ROOT"/vendor/lineage/build/tools/extract_utils.sh
+HELPER="$LINEAGE_ROOT"/vendor/aosp/build/tools/extract_utils.sh
 if [ ! -f "$HELPER" ]; then
     echo "Unable to find helper script at $HELPER"
     exit 1
@@ -79,9 +79,21 @@ CAMERA_MSM8998="$COMMON_BLOB_ROOT"/vendor/lib/hw/camera.msm8998.so
 sed -i "s|libminikin.so|libcamshim.so|g" "$CAMERA_MSM8998"
 
 #
+# Replace libskia.so with libmisk.so
+#
+MI_SKIA="$COMMON_BLOB_ROOT"/vendor/lib/libmisk.so
+MI_CAMERA_HAL="$COMMON_BLOB_ROOT"/vendor/lib/libMiCameraHal.so
+
+skia_to_misk() {
+    sed -i "s|libskia.so|libmisk.so|g" "$1"
+}
+skia_to_misk "$MI_SKIA"
+skia_to_misk "$MI_CAMERA_HAL"
+skia_to_misk "$CAMERA_MSM8998"
+
+#
 # Use updated libicuuc methods in libMiCameraHal
 #
-MI_CAMERA_HAL="$COMMON_BLOB_ROOT"/vendor/lib/libMiCameraHal.so
 sed -i "s|_ZN6icu_58|_ZN6icu_60|g" "$MI_CAMERA_HAL"
 
 #

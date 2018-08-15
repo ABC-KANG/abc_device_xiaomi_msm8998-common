@@ -66,6 +66,8 @@ vendor/lib64/vendor.qti.hardware.fm@1.0_vendor.so
 
 # Camera
 lib/libMiCameraHal.so:vendor/lib/libMiCameraHal.so
+vendor/lib/libcamshim.so|e8a4cdaa62bfc90a633bf3fb60d904775f89b08b
+lib/libskia.so:vendor/lib/libmisk.so
 lib/libtrueportrait.so:vendor/lib/libtrueportrait.so
 lib64/libblurbuster.so
 lib64/libhazebuster.so
