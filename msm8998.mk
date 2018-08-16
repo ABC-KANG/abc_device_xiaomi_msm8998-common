@@ -331,14 +331,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     prebuilts/vndk/v27/arm64/arch-arm64-armv8-a/shared/vndk-core/android.hardware.gnss@1.0.so:vendor/lib64/android.hardware.gnss@1.0-v27.so
 
-# Support for the O-MR1 devices
-PRODUCT_COPY_FILES += \
-    build/make/target/product/vndk/init.gsi.rc:system/etc/init/init.gsi.rc \
-    build/make/target/product/vndk/init.vndk-27.rc:system/etc/init/gsi/init.vndk-27.rc
-
-# Support addtional O-MR1 vendor interface
-PRODUCT_EXTRA_VNDK_VERSIONS := 27
-
 # TextClassifier smart selection model files
 PRODUCT_PACKAGES += \
     textclassifier.smartselection.bundle1
