@@ -65,6 +65,8 @@ vendor/lib64/hw/vendor.qti.hardware.fm@1.0-impl.so
 vendor/lib64/vendor.qti.hardware.fm@1.0_vendor.so
 
 # Camera
+lib/libcameraservice.so|a0b4b04347e54c33923fc8fb2ac48cfab8af4268
+lib64/libcameraservice.so|8984597c00b47505022fd99fc31c801aa47cacf8
 lib/libMiCameraHal.so:vendor/lib/libMiCameraHal.so
 vendor/lib/libcamshim.so|e8a4cdaa62bfc90a633bf3fb60d904775f89b08b
 lib/libskia.so:vendor/lib/libmisk.so
